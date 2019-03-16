@@ -45,11 +45,9 @@ apt autoclean -y
 # Install Open-Xchange
 git clone https://github.com/instantlinux/docker-tools.git
 cd docker-tools/images/open-xchange-appsuite
-# Remove ro for first run
-sed -ie 's/readOnly: true/readOnly: false/gm' kubernetes.yaml
 kubectl create namespace worker
 cd ../../k8s
 kubectl create secret generic --from-literal=ox-admin-password=mysecret1 ox-admin-password
 kubectl create secret generic --from-literal=ox-db-password=mysecret1 ox-db-password
 kubectl create secret generic --from-literal=ox-master-password=mysecret1 ox-master-password
-make docs
+OX_ETC_READONLY=false make docs
