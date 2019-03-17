@@ -29,8 +29,9 @@ apt-get install -y mariadb-server
 
 # Configure mariadb
 mariadb -e 'CREATE DATABASE oxdata;'
-mariadb -e 'GRANT ALL PRIVILEGES ON `oxdata`.* TO 'openxchange'@'%' IDENTIFIED BY 'mysecret2';'
-mariadb -e 'GRANT ALL PRIVILEGES ON `oxdatabase_5`.* TO 'openxchange'@'%' IDENTIFIED BY 'mysecret2';'
+mariadb -e 'GRANT ALL PRIVILEGES ON `oxdata`.* TO "openxchange"@"%" IDENTIFIED BY "mysecret2";'
+mariadb -e 'GRANT ALL PRIVILEGES ON `oxdatabase_5`.* TO "openxchange"@"%" IDENTIFIED BY "mysecret2";'
+mariadb -e 'FLUSH PRIVILEGES;'
 # Set hostname
 echo db00 > /etc/hostname
 hostname db00
@@ -44,10 +45,12 @@ apt autoclean -y
 
 # Install Open-Xchange
 git clone https://github.com/instantlinux/docker-tools.git
-cd docker-tools/images/open-xchange-appsuite
+cd docker-tools/k8s
 kubectl create namespace worker
-cd ../../k8s
-kubectl create secret generic --from-literal=ox-admin-password=mysecret1 ox-admin-password
-kubectl create secret generic --from-literal=ox-db-password=mysecret1 ox-db-password
-kubectl create secret generic --from-literal=ox-master-password=mysecret1 ox-master-password
+kubectl create secret generic --namespace=worker --from-literal=ox-admin-password=mysecret1 ox-admin-password
+kubectl create secret generic --namespace=worker --from-literal=ox-db-password=mysecret1 ox-db-password
+kubectl create secret generic --namespace=worker --from-literal=ox-master-password=mysecret1 ox-master-password
+mkdir -p /var/lib/docker/k8s-volumes/share
+mkdir -p /var/lib/docker/k8s-volumes/admin
+
 OX_ETC_READONLY=false make docs
