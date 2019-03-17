@@ -3,7 +3,7 @@
 apt update
 apt upgrade -y
 apt dist-upgrade -y
-apt install -y apt-transport-https ca-certificates curl software-properties-common
+apt install -y apt-transport-https ca-certificates curl software-properties-common make
 
 # Install docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
