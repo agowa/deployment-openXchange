@@ -28,6 +28,8 @@ apt-get update
 apt-get install -y mariadb-server
 
 # Configure mariadb
+sed -ie 's/bind-address.*/bind-address = 0.0.0.0/gm' /etc/mysql/mariadb.conf.d/50-server.cnf
+systemctl restart mariadb.service
 mariadb -e 'CREATE DATABASE oxdata;'
 mariadb -e 'GRANT ALL PRIVILEGES ON `oxdata`.* TO "openxchange"@"%" IDENTIFIED BY "mysecret2";'
 mariadb -e 'GRANT ALL PRIVILEGES ON `oxdatabase_5`.* TO "openxchange"@"%" IDENTIFIED BY "mysecret2";'
